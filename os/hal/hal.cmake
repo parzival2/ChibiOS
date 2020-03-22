@@ -6,6 +6,7 @@ message(STATUS "CHIBIOS_HAL_DIR : " ${CHIBIOS_HAL_DIR})
 # Source files
 set(CHIBIOS_HAL_SRC
     ${CHIBIOS_HAL_DIR}/src/hal.c
+    ${CHIBIOS_HAL_DIR}/src/hal_st.c
     ${CHIBIOS_HAL_DIR}/src/hal_buffers.c
     ${CHIBIOS_HAL_DIR}/src/hal_queues.c
     ${CHIBIOS_HAL_DIR}/src/hal_mmcsd.c
@@ -28,7 +29,6 @@ set(CHIBIOS_HAL_SRC
     ${CHIBIOS_HAL_DIR}/src/hal_serial.c
     ${CHIBIOS_HAL_DIR}/src/hal_serial_usb.c
     ${CHIBIOS_HAL_DIR}/src/hal_spi.c
-    ${CHIBIOS_HAL_DIR}/src/hal_st.c
     ${CHIBIOS_HAL_DIR}/src/hal_uart.c
     ${CHIBIOS_HAL_DIR}/src/hal_usb.c
     ${CHIBIOS_HAL_DIR}/src/hal_wdg.c
