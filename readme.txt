@@ -73,9 +73,56 @@
 *** Releases and Change Log                                               ***
 *****************************************************************************
 
+*** 19.1.5 ***
+- FIX: Fixed missing STM32F765 from registry (bug #1145).
+- FIX: Fixed wrong macro check on STM32 SPIv3 (bug #1144).
+- FIX: Fixed FAT time problem in RTC driver (bug #1142).
+- FIX: Fixed Heap allocation of aligned FIFO objects in chFactory (bug #1141).
+- FIX: Fixed GCC 10 causes warning in factory module (bug #1139).
+- FIX: Fixed C strict aliasing rules violation causes test cases to fail
+       (bug #1138).
+- FIX: Fixed GCC 10 causes warning in factory module (bug #1139).
+- FIX: Fixed OTG_FS error on STM32H7 (bug #1135).
+- FIX: Fixed wrong check on LSI on all STM32 platforms (bug #1131).
+- FIX: Fixed OSAL does not allow 64 bits resolution values (bug #1128).
+- FIX: Fixed wrong SDMMC RCC macros for STM32H7xx (bug #1127).
+- FIX: Fixed STM32 ADCv3 hanging on initialization (bug #1126).
+- FIX: Fixed I2S-related problems in STM32F4xx registry (bug #1124).
+- FIX: Fixed STM32 EXTIv1 driver unable to enable/disable fixed lines
+       (bug #1123).
+- FIX: Fixed incorrect STM32 iWDG initialization in windowed mode (bug #1122).
+- FIX: Fixed ADCv1 compile problem (bug #1118).
+- FIX: Fixed missing STM32_I2C_BDMA_REQUIRED definition in I2Cv3 driver
+       (bug #1109).
+- FIX: Fixed wrong definitions in SPC563M board files (bug #1108).
+- FIX: Fixed cortex-M vectors table alignment problem (bug #1107).
+- FIX: Fixed extra condition in MAC driver macWaitTransmitDescriptor() function
+       (bug #1106).
+- FIX: Fixed schedule anomaly when CH_CFG_TIME_QUANTUM is greater than zero
+       (bug #1105).
+- FIX: Fixed Virtual Timers corner case (bug #1104).
+- FIX: Fixed GCC6 problem breaks Cortex-M0 port (bug #985).
+- FIX: Fixed failure in chSemReset() function when counter is equal to MAXINT
+       (bug #1093).
+- FIX: Fixed swapped definition in ST_STM32F746G_DISCOVERY board files
+       (bug #1092).
+
 *** 19.1.4 ***
+- NEW: Updated debug tools to be independent from the toolchain position:
+       they now rely on the environment variable CHIBISTUDIO.
 - NEW: Added support for .cc files extensions in makefiles.
 - NEW: Made bus acquire/release functions in SNOR driver public.
+- FIX: Fixed STM32H7xx ADC problem in dual mode (bug #1089).
+- FIX: Fixed invalid CHSEL DMA setting in STM32 UART drivers (bug #1088).
+- FIX: Fixed undefined TEST_CFG_SIZE_REPORT warning (bug #1087).
+- FIX: Fixed wrong arguments for the cacheBufferInvalidate in the STM32 SPI 
+       demo (bug #1086).
+- FIX: Fixed race condition in HAL MAC driver (bug #1083).
+- FIX: Fixed problem in chMtxUnlockAllS() (bug #1076).
+- FIX: Fixed state check in CMSIS osKernelInitialize() wrapper (bug #1075).
+- FIX: Fixed duplicated code in TIMv1/hal_gpt_lld.c (bug #1074).
+- FIX: Fixed missing IRQ disabling in ADCv1 and ADCv3 STM32 drivers (bug #1073).
+- FIX: Fixed missing parenthesis in ADC _adc_isr_error_code macro (bug #1072).
 - FIX: Fixed invalid macro check in test library (bug #1071).
 - FIX: Fixed non-standard declaration in STM32 ADCv3 driver (bug #1070).
 - FIX: Fixed problem in the I2C fallback driver (bug #1069).
