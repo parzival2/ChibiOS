@@ -1,12 +1,18 @@
-include(CMakeForceCompiler)
-
 set(CMAKE_SYSTEM_NAME ChibiOS)
 
-set(TOOLCHAIN_DIR $ENV{HOME}/Softwares/gcc-arm-none-eabi-8-2019-q3-update)
+set(TOOLCHAIN_DIR /opt/gcc-arm-none-eabi-9-2020-q2-update)
 set(TOOLCHAIN_BIN_DIR ${TOOLCHAIN_DIR}/bin)
 set(TOOLCHAIN_COMMON_PREFIX arm-none-eabi)
-cmake_force_c_compiler(${TOOLCHAIN_BIN_DIR}/${TOOLCHAIN_COMMON_PREFIX}-gcc GNU)
-cmake_force_cxx_compiler(${TOOLCHAIN_BIN_DIR}/${TOOLCHAIN_COMMON_PREFIX}-g++ GNU)
+
+# Without that flag CMake is not able to pass test compilation check
+if (${CMAKE_VERSION} VERSION_EQUAL "3.6.0" OR ${CMAKE_VERSION} VERSION_GREATER "3.6")
+    set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
+else()
+    set(CMAKE_EXE_LINKER_FLAGS_INIT "--specs=nosys.specs")
+endif()
+
+set(CMAKE_C_COMPILER ${TOOLCHAIN_BIN_DIR}/${TOOLCHAIN_COMMON_PREFIX}-gcc)
+set(CMAKE_CXX_COMPILER ${TOOLCHAIN_BIN_DIR}/${TOOLCHAIN_COMMON_PREFIX}-g++)
 set(CMAKE_FIND_ROOT_PATH ${TOOLCHAIN_DIR})
 
 set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
