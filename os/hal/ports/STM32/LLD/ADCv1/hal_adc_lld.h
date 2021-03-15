@@ -44,7 +44,7 @@
 #define ADC_SMPR_SMP_55P5       5U  /**< @brief 68 cycles conversion time.  */
 #define ADC_SMPR_SMP_71P5       6U  /**< @brief 84 cycles conversion time.  */
 #define ADC_SMPR_SMP_239P5      7U  /**< @brief 252 cycles conversion time. */
-#elif defined(STM32L0XX) || defined(STM32G0XX)
+#elif defined(STM32L0XX)
 #define ADC_SMPR_SMP_1P5        0U  /**< @brief 14 cycles conversion time   */
 #define ADC_SMPR_SMP_3P5        1U  /**< @brief 16 cycles conversion time.  */
 #define ADC_SMPR_SMP_7P5        2U  /**< @brief 20 cycles conversion time.  */
@@ -161,7 +161,7 @@
  *          default, @p STM32_ADC_CKMODE_ADCCLK).
  */
 #if !defined(STM32_ADC_PRESCALER_VALUE) || defined(__DOXYGEN__)
-#define STM32_ADC_PRESCALER_VALUE           1
+#define STM32_ADC_PRESCALER_VALUE           2
 #endif
 #endif
 
@@ -172,12 +172,11 @@
 /*===========================================================================*/
 
 /* Supported devices checks.*/
-#if !defined(STM32F0XX) && !defined(STM32L0XX) && !defined(STM32G0XX)
-#error "ADCv1 only supports F0, L0 and G0 STM32 devices"
+#if !defined(STM32F0XX) && !defined(STM32L0XX)
+#error "ADCv1 only supports F0 and L0 STM32 devices"
 #endif
 
-#if defined(STM32L0XX) || defined(STM32G0XX) ||                             \
-    defined(__DOXYGEN__)
+#if defined(STM32L0XX) || defined(__DOXYGEN__)
 #define STM32_ADCV1_OVERSAMPLING            TRUE
 #else
 #define STM32_ADCV1_OVERSAMPLING            FALSE
@@ -186,6 +185,10 @@
 /* Registry checks.*/
 #if !defined(STM32_HAS_ADC1)
 #error "STM32_HAS_ADC1 not defined in registry"
+#endif
+
+#if !defined(STM32_ADC_SUPPORTS_PRESCALER)
+#error "STM32_ADC_SUPPORTS_PRESCALER not defined in registry"
 #endif
 
 #if (STM32_ADC_USE_ADC1 && !defined(STM32_ADC1_HANDLER))
@@ -246,9 +249,7 @@
 
 /* ADC clock source checks.*/
 #if STM32_ADC_SUPPORTS_PRESCALER == TRUE
-#if STM32_ADC_PRESCALER_VALUE == 1
-#define STM32_ADC_PRESC                     0U
-#elif STM32_ADC_PRESCALER_VALUE == 2
+#if STM32_ADC_PRESCALER_VALUE == 2
 #define STM32_ADC_PRESC                     1U
 #elif STM32_ADC_PRESCALER_VALUE == 4
 #define STM32_ADC_PRESC                     2U

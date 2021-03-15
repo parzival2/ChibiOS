@@ -61,7 +61,7 @@
 #define STM32_PLLSRC                        ${doc.STM32_PLLSRC!"STM32_PLLSRC_HSI16"}
 #define STM32_PLLM_VALUE                    ${doc.STM32_PLLM_VALUE!"2"}
 #define STM32_PLLN_VALUE                    ${doc.STM32_PLLN_VALUE!"16"}
-#define STM32_PLLP_VALUE                    ${doc.STM32_PLLP_VALUE!"4"}
+#define STM32_PLLP_VALUE                    ${doc.STM32_PLLP_VALUE!"2"}
 #define STM32_PLLQ_VALUE                    ${doc.STM32_PLLQ_VALUE!"4"}
 #define STM32_PLLR_VALUE                    ${doc.STM32_PLLR_VALUE!"2"}
 #define STM32_HPRE                          ${doc.STM32_HPRE!"STM32_HPRE_DIV1"}
@@ -119,7 +119,7 @@
 #define STM32_ADC_ADC1_DMA_PRIORITY         ${doc.STM32_ADC_ADC1_DMA_PRIORITY!"2"}
 #define STM32_ADC_ADC1_DMA_IRQ_PRIORITY     ${doc.STM32_ADC_ADC1_DMA_IRQ_PRIORITY!"2"}
 #define STM32_ADC_ADC1_DMA_STREAM           ${doc.STM32_ADC_ADC1_DMA_STREAM!"STM32_DMA_STREAM_ID_ANY"}
-#define STM32_ADC_PRESCALER_VALUE           ${doc.STM32_ADC_PRESCALER_VALUE!"1"}
+#define STM32_ADC_PRESCALER_VALUE           ${doc.STM32_ADC_PRESCALER_VALUE!"2"}
 
 /*
  * DAC driver system settings.
@@ -190,6 +190,15 @@
 #define STM32_SERIAL_USE_USART3             ${doc.STM32_SERIAL_USE_USART3!"FALSE"}
 #define STM32_SERIAL_USE_UART4              ${doc.STM32_SERIAL_USE_UART4!"FALSE"}
 #define STM32_SERIAL_USE_LPUART1            ${doc.STM32_SERIAL_USE_LPUART1!"TRUE"}
+
+/*
+ * SIO driver system settings.
+ */
+#define STM32_SIO_USE_USART1                ${doc.STM32_SIO_USE_USART1!"FALSE"}
+#define STM32_SIO_USE_USART2                ${doc.STM32_SIO_USE_USART2!"FALSE"}
+#define STM32_SIO_USE_USART3                ${doc.STM32_SIO_USE_USART3!"FALSE"}
+#define STM32_SIO_USE_UART4                 ${doc.STM32_SIO_USE_UART4!"FALSE"}
+#define STM32_SIO_USE_LPUART1               ${doc.STM32_SIO_USE_LPUART1!"FALSE"}
 
 /*
  * SPI driver system settings.

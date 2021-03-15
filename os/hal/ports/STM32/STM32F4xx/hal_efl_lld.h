@@ -16,7 +16,7 @@
 
 /**
  * @file    hal_efl_lld.h
- * @brief   STM32F412/413 Embedded Flash subsystem low level driver header.
+ * @brief   STM32F4xx Embedded Flash subsystem low level driver header.
  *
  * @addtogroup HAL_EFL
  * @{
@@ -51,7 +51,8 @@
 /* Derived constants and error checks.                                       */
 /*===========================================================================*/
 
-#if defined(STM32F413xx) || defined(STM32F412xx) || defined(__DOXYGEN__)
+#if defined(STM32F413xx) || defined(STM32F412xx) || defined(STM32F40_41xxx)  \
+						 || defined(__DOXYGEN__)
 
 /* Flash size register. */
 #define STM32_FLASH_SIZE_REGISTER           0x1FFF7A22
@@ -120,7 +121,7 @@ extern "C" {
   flash_error_t efl_lld_start_erase_all(void *instance);
   flash_error_t efl_lld_start_erase_sector(void *instance,
                                            flash_sector_t sector);
-  flash_error_t efl_lld_query_erase(void *instance, uint32_t *wait_time);
+  flash_error_t efl_lld_query_erase(void *instance, uint32_t *msec);
   flash_error_t efl_lld_verify_erase(void *instance, flash_sector_t sector);
 #ifdef __cplusplus
 }

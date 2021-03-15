@@ -18,7 +18,7 @@
 */
 
 /**
- * @file    chtm.c
+ * @file    rt/src/chtm.c
  * @brief   Time Measurement module code.
  *
  * @addtogroup time_measurement
@@ -33,6 +33,13 @@
 /*===========================================================================*/
 /* Module local definitions.                                                 */
 /*===========================================================================*/
+
+/**
+ * @brief   Number of iterations in the calibration loop.
+ * @note    This is required in order to assess the best result in
+ *          architectures with instruction cache.
+ */
+#define TM_CALIBRATION_LOOP             4U
 
 /*===========================================================================*/
 /* Module exported variables.                                                */
@@ -70,21 +77,29 @@ static inline void tm_stop(time_measurement_t *tmp,
 /*===========================================================================*/
 
 /**
- * @brief   Initializes the time measurement unit.
+ * @brief   Time measurement initialization.
+ * @note    Internal use only.
  *
- * @init
+ * @param[out] tcp      pointer to the @p tm_calibration_t structure
+ *
+ * @notapi
  */
-void _tm_init(void) {
+void __tm_calibration_init(tm_calibration_t *tcp) {
   time_measurement_t tm;
+  unsigned i;
 
   /* Time Measurement subsystem calibration, it does a null measurement
      and calculates the call overhead which is subtracted to real
      measurements.*/
-  ch.tm.offset = (rtcnt_t)0;
+  tcp->offset = (rtcnt_t)0;
   chTMObjectInit(&tm);
-  chTMStartMeasurementX(&tm);
-  chTMStopMeasurementX(&tm);
-  ch.tm.offset = tm.last;
+  i = TM_CALIBRATION_LOOP;
+  do {
+    chTMStartMeasurementX(&tm);
+    chTMStopMeasurementX(&tm);
+    i--;
+  } while (i > 0U);
+  tcp->offset = tm.best;
 }
 
 /**
@@ -126,7 +141,7 @@ NOINLINE void chTMStartMeasurementX(time_measurement_t *tmp) {
  */
 NOINLINE void chTMStopMeasurementX(time_measurement_t *tmp) {
 
-  tm_stop(tmp, chSysGetRealtimeCounterX(), ch.tm.offset);
+  tm_stop(tmp, chSysGetRealtimeCounterX(), currcore->tmc.offset);
 }
 
 /**

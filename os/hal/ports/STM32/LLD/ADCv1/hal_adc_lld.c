@@ -34,11 +34,15 @@
   STM32_DMA_GETCHANNEL(STM32_ADC_ADC1_DMA_STREAM, STM32_ADC1_DMA_CHN)
 
 /* Headers differences patches.*/
-#if defined(ADC_IER_AWDIE)
+#if defined(ADC_IER_AWDIE) && !defined(ADC_IER_AWD1IE)
 #define ADC_IER_AWD1IE      ADC_IER_AWDIE
-#define ADC_ISR_AWD1        ADC_ISR_AWD
-#define TR1                 TR
 #endif
+
+#if defined(ADC_ISR_AWD) && !defined(ADC_ISR_AWD1)
+#define ADC_ISR_AWD1        ADC_ISR_AWD
+#endif
+
+#define TR1                 TR
 
 /*===========================================================================*/
 /* Driver exported variables.                                                */
@@ -58,6 +62,25 @@ ADCDriver ADCD1;
 /*===========================================================================*/
 
 /**
+ * @brief   ADC voltage regulator enable.
+ *
+ * @param[in] adc       pointer to the ADC registers block
+ */
+NOINLINE static void adc_lld_vreg_on(ADC_TypeDef *adc) {
+
+  osalDbgAssert(adc->CR == 0, "invalid register state");
+
+#if defined(ADC_CR_ADVREGEN)
+  adc->CR = ADC_CR_ADVREGEN;
+  volatile uint32_t loop = (STM32_HCLK >> 20) << 4;
+  do {
+    loop--;
+  } while (loop > 0);
+#else
+#endif
+}
+
+/**
  * @brief   Stops an ongoing conversion, if any.
  *
  * @param[in] adc       pointer to the ADC registers block
@@ -68,11 +91,12 @@ static void adc_lld_stop_adc(ADC_TypeDef *adc) {
     adc->CR |= ADC_CR_ADSTP;
     while (adc->CR & ADC_CR_ADSTP)
       ;
+    adc->IER = 0;
   }
 }
 
 /**
- * @brief   ADC DMA ISR service routine.
+ * @brief   ADC DMA service routine.
  *
  * @param[in] adcp      pointer to the @p ADCDriver object
  * @param[in] flags     pre-shifted content of the ISR register
@@ -166,11 +190,13 @@ void adc_lld_init(void) {
   ADC->CCR = 0;
 #endif
 
-  osalDbgAssert(ADC1->CR == 0, "invalid register state");
+  /* Regulator enabled and stabilized before calibration.*/
+  adc_lld_vreg_on(ADC1);
+
   ADC1->CR |= ADC_CR_ADCAL;
-  osalDbgAssert(ADC1->CR != 0, "invalid register state");
   while (ADC1->CR & ADC_CR_ADCAL)
     ;
+  ADC1->CR = 0;
   rccDisableADC1();
 }
 
@@ -204,6 +230,9 @@ void adc_lld_start(ADCDriver *adcp) {
       adcp->adc->CFGR2 = STM32_ADC_ADC1_CKMODE;
     }
 #endif /* STM32_ADC_USE_ADC1 */
+
+    /* Regulator enabled and stabilized before calibration.*/
+    adc_lld_vreg_on(ADC1);
 
     /* ADC initial setup, starting the analog part here in order to reduce
        the latency when starting a conversion.*/
@@ -242,6 +271,9 @@ void adc_lld_stop(ADCDriver *adcp) {
       while (adcp->adc->CR & ADC_CR_ADDIS)
         ;
     }
+
+    /* Regulator and anything else off.*/
+    adcp->adc->CR = 0;
 
 #if STM32_ADC_USE_ADC1
     if (&ADCD1 == adcp)

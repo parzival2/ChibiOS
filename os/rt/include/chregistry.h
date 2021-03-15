@@ -18,7 +18,7 @@
 */
 
 /**
- * @file    chregistry.h
+ * @file    rt/include/chregistry.h
  * @brief   Threads registry macros and structures.
  *
  * @addtogroup registry
@@ -80,23 +80,24 @@ typedef struct {
  *
  * @param[in] tp        thread to remove from the registry
  */
-#define REG_REMOVE(tp) {                                                    \
+#define REG_REMOVE(tp) do {                                                 \
   (tp)->older->newer = (tp)->newer;                                         \
   (tp)->newer->older = (tp)->older;                                         \
-}
+} while (false)
 
 /**
  * @brief   Adds a thread to the registry list.
  * @note    This macro is not meant for use in application code.
  *
+ * @param[in] oip       pointer to the OS instance
  * @param[in] tp        thread to add to the registry
  */
-#define REG_INSERT(tp) {                                                    \
-  (tp)->newer = (thread_t *)&ch.rlist;                                      \
-  (tp)->older = ch.rlist.older;                                           \
+#define REG_INSERT(oip, tp) do {                                            \
+  (tp)->newer = (thread_t *)&(oip)->rlist;                                  \
+  (tp)->older = (oip)->rlist.older;                                         \
   (tp)->older->newer = (tp);                                                \
-  ch.rlist.older = (tp);                                                  \
-}
+  (oip)->rlist.older = (tp);                                                \
+} while (false)
 
 /*===========================================================================*/
 /* External declarations.                                                    */
@@ -133,7 +134,7 @@ extern "C" {
 static inline void chRegSetThreadName(const char *name) {
 
 #if CH_CFG_USE_REGISTRY == TRUE
-  ch.rlist.current->name = name;
+  __sch_get_currthread(currcore)->name = name;
 #else
   (void)name;
 #endif

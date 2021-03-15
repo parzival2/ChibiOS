@@ -18,7 +18,7 @@
 */
 
 /**
- * @file    chmsg.c
+ * @file    rt/src/chmsg.c
  * @brief   Messages code.
  *
  * @addtogroup messages
@@ -64,9 +64,9 @@
 /*===========================================================================*/
 
 #if CH_CFG_USE_MESSAGES_PRIORITY == TRUE
-#define msg_insert(tp, qp) queue_prio_insert(tp, qp)
+#define msg_insert(tp, qp) ch_sch_prio_insert(&tp->hdr.queue, qp)
 #else
-#define msg_insert(tp, qp) queue_insert(tp, qp)
+#define msg_insert(tp, qp) ch_queue_insert(&tp->hdr.queue, qp)
 #endif
 
 /*===========================================================================*/
@@ -85,18 +85,18 @@
  * @api
  */
 msg_t chMsgSend(thread_t *tp, msg_t msg) {
-  thread_t *ctp = currp;
+  thread_t *currtp = chThdGetSelfX();
 
   chDbgCheck(tp != NULL);
 
   chSysLock();
-  ctp->u.sentmsg = msg;
-  msg_insert(ctp, &tp->msgqueue);
+  currtp->u.sentmsg = msg;
+  msg_insert(currtp, &tp->msgqueue);
   if (tp->state == CH_STATE_WTMSG) {
     (void) chSchReadyI(tp);
   }
   chSchGoSleepS(CH_STATE_SNDMSGQ);
-  msg = ctp->u.rdymsg;
+  msg = currtp->u.rdymsg;
   chSysUnlock();
 
   return msg;
@@ -119,14 +119,15 @@ msg_t chMsgSend(thread_t *tp, msg_t msg) {
  * @sclass
  */
 thread_t *chMsgWaitS(void) {
+  thread_t *currtp = chThdGetSelfX();
   thread_t *tp;
 
   chDbgCheckClassS();
 
-  if (!chMsgIsPendingI(currp)) {
+  if (!chMsgIsPendingI(currtp)) {
     chSchGoSleepS(CH_STATE_WTMSG);
   }
-  tp = queue_fifo_remove(&currp->msgqueue);
+  tp = (thread_t *)ch_queue_fifo_remove(&currtp->msgqueue);
   tp->state = CH_STATE_SNDMSG;
 
   return tp;
@@ -155,16 +156,17 @@ thread_t *chMsgWaitS(void) {
  * @sclass
  */
 thread_t *chMsgWaitTimeoutS(sysinterval_t timeout) {
+  thread_t *currtp = chThdGetSelfX();
   thread_t *tp;
 
   chDbgCheckClassS();
 
-  if (!chMsgIsPendingI(currp)) {
+  if (!chMsgIsPendingI(currtp)) {
     if (chSchGoSleepTimeoutS(CH_STATE_WTMSG, timeout) != MSG_OK) {
       return NULL;
     }
   }
-  tp = queue_fifo_remove(&currp->msgqueue);
+  tp = (thread_t *)ch_queue_fifo_remove(&currtp->msgqueue);
   tp->state = CH_STATE_SNDMSG;
 
   return tp;
@@ -188,10 +190,11 @@ thread_t *chMsgWaitTimeoutS(sysinterval_t timeout) {
  * @sclass
  */
 thread_t *chMsgPollS(void) {
+  thread_t *currtp = chThdGetSelfX();
   thread_t *tp = NULL;
 
-  if (chMsgIsPendingI(currp)) {
-    tp = queue_fifo_remove(&currp->msgqueue);
+  if (chMsgIsPendingI(currtp)) {
+    tp = (thread_t *)ch_queue_fifo_remove(&currtp->msgqueue);
     tp->state = CH_STATE_SNDMSG;
   }
 

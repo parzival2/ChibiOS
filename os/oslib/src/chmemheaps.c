@@ -18,7 +18,7 @@
 */
 
 /**
- * @file    chmemheaps.c
+ * @file    oslib/src/chmemheaps.c
  * @brief   Memory heaps code.
  *
  * @addtogroup oslib_memheaps
@@ -104,7 +104,7 @@ static memory_heap_t default_heap;
  *
  * @notapi
  */
-void _heap_init(void) {
+void __heap_init(void) {
 
   default_heap.provider = chCoreAllocAlignedWithOffset;
   H_NEXT(&default_heap.header) = NULL;

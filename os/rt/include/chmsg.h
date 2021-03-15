@@ -18,7 +18,7 @@
 */
 
 /**
- * @file    chmsg.h
+ * @file    rt/include/chmsg.h
  * @brief   Messages macros and structures.
  *
  * @addtogroup messages
@@ -168,7 +168,7 @@ static inline bool chMsgIsPendingI(thread_t *tp) {
 
   chDbgCheckClassI();
 
-  return (bool)(tp->msgqueue.next != (thread_t *)&tp->msgqueue);
+  return (bool)(tp->msgqueue.next != &tp->msgqueue);
 }
 
 /**

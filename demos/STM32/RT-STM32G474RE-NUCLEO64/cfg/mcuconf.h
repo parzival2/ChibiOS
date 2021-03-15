@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2018 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2020 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -86,7 +86,7 @@
 #define STM32_ADC12SEL                      STM32_ADC12SEL_PLLPCLK
 #define STM32_ADC345SEL                     STM32_ADC345SEL_PLLPCLK
 #define STM32_QSPISEL                       STM32_QSPISEL_SYSCLK
-#define STM32_RTCSEL                        STM32_RTCSEL_NOCLOCK
+#define STM32_RTCSEL                        STM32_RTCSEL_LSE
 
 /*
  * IRQ system settings.
@@ -106,6 +106,10 @@
 #define STM32_IRQ_EXTI212229_PRIORITY       6
 #define STM32_IRQ_EXTI30_32_PRIORITY        6
 #define STM32_IRQ_EXTI33_PRIORITY           6
+
+#define STM32_IRQ_FDCAN1_PRIORITY           10
+#define STM32_IRQ_FDCAN2_PRIORITY           10
+#define STM32_IRQ_FDCAN3_PRIORITY           10
 
 #define STM32_IRQ_TIM1_BRK_TIM15_PRIORITY   7
 #define STM32_IRQ_TIM1_UP_TIM16_PRIORITY    7
@@ -132,10 +136,38 @@
 /*
  * ADC driver system settings.
  */
+#define STM32_ADC_DUAL_MODE                 FALSE
+#define STM32_ADC_COMPACT_SAMPLES           FALSE
+#define STM32_ADC_USE_ADC1                  TRUE
+#define STM32_ADC_USE_ADC2                  TRUE
+#define STM32_ADC_USE_ADC3                  TRUE
+#define STM32_ADC_USE_ADC4                  TRUE
+#define STM32_ADC_ADC1_DMA_STREAM           STM32_DMA_STREAM_ID_ANY
+#define STM32_ADC_ADC2_DMA_STREAM           STM32_DMA_STREAM_ID_ANY
+#define STM32_ADC_ADC3_DMA_STREAM           STM32_DMA_STREAM_ID_ANY
+#define STM32_ADC_ADC4_DMA_STREAM           STM32_DMA_STREAM_ID_ANY
+#define STM32_ADC_ADC1_DMA_PRIORITY         2
+#define STM32_ADC_ADC2_DMA_PRIORITY         2
+#define STM32_ADC_ADC3_DMA_PRIORITY         2
+#define STM32_ADC_ADC4_DMA_PRIORITY         2
+#define STM32_ADC_ADC12_IRQ_PRIORITY        5
+#define STM32_ADC_ADC3_IRQ_PRIORITY         5
+#define STM32_ADC_ADC4_IRQ_PRIORITY         5
+#define STM32_ADC_ADC1_DMA_IRQ_PRIORITY     5
+#define STM32_ADC_ADC2_DMA_IRQ_PRIORITY     5
+#define STM32_ADC_ADC3_DMA_IRQ_PRIORITY     5
+#define STM32_ADC_ADC4_DMA_IRQ_PRIORITY     5
+#define STM32_ADC_ADC12_CLOCK_MODE          ADC_CCR_CKMODE_AHB_DIV4
+#define STM32_ADC_ADC345_CLOCK_MODE         ADC_CCR_CKMODE_AHB_DIV4
+#define STM32_ADC_ADC12_PRESC               ADC_CCR_PRESC_DIV2
+#define STM32_ADC_ADC345_PRESC              ADC_CCR_PRESC_DIV2
 
 /*
  * CAN driver system settings.
  */
+#define STM32_CAN_USE_FDCAN1                FALSE
+#define STM32_CAN_USE_FDCAN2                FALSE
+#define STM32_CAN_USE_FDCAN3                FALSE
 
 /*
  * DAC driver system settings.
@@ -255,7 +287,17 @@
 #define STM32_SERIAL_USE_USART3             FALSE
 #define STM32_SERIAL_USE_UART4              FALSE
 #define STM32_SERIAL_USE_UART5              FALSE
-#define STM32_SERIAL_USE_LPUART1            TRUE
+#define STM32_SERIAL_USE_LPUART1            FALSE
+
+/*
+ * SIO driver system settings.
+ */
+#define STM32_SIO_USE_USART1                FALSE
+#define STM32_SIO_USE_USART2                FALSE
+#define STM32_SIO_USE_USART3                FALSE
+#define STM32_SIO_USE_UART4                 FALSE
+#define STM32_SIO_USE_UART5                 FALSE
+#define STM32_SIO_USE_LPUART1               TRUE
 
 /*
  * SPI driver system settings.

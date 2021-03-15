@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2018 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2020 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -50,7 +50,7 @@
 #define STM32_PLLSRC                        STM32_PLLSRC_HSI16
 #define STM32_PLLM_VALUE                    2
 #define STM32_PLLN_VALUE                    16
-#define STM32_PLLP_VALUE                    4
+#define STM32_PLLP_VALUE                    2
 #define STM32_PLLQ_VALUE                    4
 #define STM32_PLLR_VALUE                    2
 #define STM32_HPRE                          STM32_HPRE_DIV1
@@ -108,7 +108,7 @@
 #define STM32_ADC_ADC1_DMA_PRIORITY         2
 #define STM32_ADC_ADC1_DMA_IRQ_PRIORITY     2
 #define STM32_ADC_ADC1_DMA_STREAM           STM32_DMA_STREAM_ID_ANY
-#define STM32_ADC_PRESCALER_VALUE           1
+#define STM32_ADC_PRESCALER_VALUE           2
 
 /*
  * DAC driver system settings.
@@ -179,6 +179,15 @@
 #define STM32_SERIAL_USE_USART3             FALSE
 #define STM32_SERIAL_USE_UART4              FALSE
 #define STM32_SERIAL_USE_LPUART1            FALSE
+
+/*
+ * SIO driver system settings.
+ */
+#define STM32_SIO_USE_USART1                FALSE
+#define STM32_SIO_USE_USART2                FALSE
+#define STM32_SIO_USE_USART3                FALSE
+#define STM32_SIO_USE_UART4                 FALSE
+#define STM32_SIO_USE_LPUART1               FALSE
 
 /*
  * SPI driver system settings.

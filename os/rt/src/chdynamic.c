@@ -18,7 +18,7 @@
 */
 
 /**
- * @file    chdynamic.c
+ * @file    rt/src/chdynamic.c
  * @brief   Dynamic threads code.
  *
  * @addtogroup dynamic_threads
@@ -100,9 +100,9 @@ thread_t *chThdCreateFromHeap(memory_heap_t *heapp, size_t size,
   };
 
 #if CH_DBG_FILL_THREADS == TRUE
-  _thread_memfill((uint8_t *)wsp,
-                  (uint8_t *)wsp + size,
-                  CH_DBG_STACK_FILL_VALUE);
+  __thd_memfill((uint8_t *)wsp,
+                (uint8_t *)wsp + size,
+                CH_DBG_STACK_FILL_VALUE);
 #endif
 
   chSysLock();
@@ -164,9 +164,9 @@ thread_t *chThdCreateFromMemoryPool(memory_pool_t *mp, const char *name,
   };
 
 #if CH_DBG_FILL_THREADS == TRUE
-  _thread_memfill((uint8_t *)wsp,
-                  (uint8_t *)wsp + mp->object_size,
-                  CH_DBG_STACK_FILL_VALUE);
+  __thd_memfill((uint8_t *)wsp,
+                (uint8_t *)wsp + mp->object_size,
+                CH_DBG_STACK_FILL_VALUE);
 #endif
 
   chSysLock();
